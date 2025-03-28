@@ -17,7 +17,8 @@ import java.util.List;
 public class Contact {
     @Id
     private String id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String displayName;
     private String profilePhotoUrl;
     private LocalDateTime createdAt = LocalDateTime.now();

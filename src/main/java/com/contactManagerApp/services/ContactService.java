@@ -8,10 +8,11 @@ import java.util.Optional;
 public interface ContactService {
     Contact createContact(Contact contact);
     Contact updateContact(String id, Contact updatedContact);
-    boolean deleteContact(String id);
+    void deleteContact(String id);
     List<Contact> searchContact(String query);
     Optional<Contact> getContactById(String id);
     Optional<Contact> shareContact(String contactId, String targetUserId);
     List<Contact> getAllContacts();
+    Contact addContactToGroup(String contactId, String groupId);
 
 }

@@ -7,6 +7,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,5 +21,7 @@ public class Group {
     private String name;
     private String description;
     private LocalDateTime createdAt;
+    private Set<Contact> contacts = new HashSet<>();
+
 
 }

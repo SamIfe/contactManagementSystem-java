@@ -1,4 +1,8 @@
 package com.contactManagerApp.exceptions.contactExceptions;
 
-public class ContactNotFoundExecption {
+import com.contactManagerApp.exceptions.baseExceptions.ContactManagerException;
+
+public class ContactNotFoundException extends ContactManagerException {
+    public ContactNotFoundException(String contactNotFound) {
+    }
 }

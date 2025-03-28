@@ -1,9 +1,12 @@
 package com.contactManagerApp.services;
 
 import com.contactManagerApp.data.models.Contact;
+import com.contactManagerApp.data.models.Group;
 import com.contactManagerApp.data.repositories.ContactRepository;
 import com.contactManagerApp.data.repositories.GroupRepository;
 import com.contactManagerApp.data.repositories.UserRepository;
+import com.contactManagerApp.exceptions.contactExceptions.ContactNotFoundException;
+import com.contactManagerApp.exceptions.groupExeceptions.GroupNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +19,15 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ContactServiceImpl implements ContactService {
+
     @Autowired
     private ContactRepository contactRepository;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GroupRepository groupRepository;
 
     @Override
     public Contact createContact(Contact contact) {
@@ -37,17 +44,33 @@ public class ContactServiceImpl implements ContactService {
             existingContact.setProfilePhotoUrl(updatedContact.getProfilePhotoUrl());
             existingContact.setUpdatedAt(LocalDateTime.now());
 
-        }
+            existingContact.getPhoneNumbers().clear();
+            existingContact.getPhoneNumbers().addAll(updatedContact.getPhoneNumbers());
+
+            existingContact.getEmails().clear();
+            existingContact.getEmails().addAll(updatedContact.getEmails());
+
+            existingContact.getAddresses().clear();
+            existingContact.getAddresses().addAll(existingContact.getAddresses());
+
+            return contactRepository.save(existingContact);
+        })
+                .orElseThrow(() -> new ContactNotFoundException("Contact not found"));
     }
 
     @Override
-    public boolean deleteContact(String id) {
-        if(contactRepository.existsById(id)) {
-            contactRepository.deleteById(id);
-            return true;
+    public void deleteContact(String id) {
+        Contact contact = contactRepository.findById(id)
+                .orElseThrow(()-> new ContactNotFoundException("Contact not found"));
+
+        for (Group group : contact.getGroups()){
+            group.getContacts().remove(contact);
+            groupRepository.save(group);
         }
-        return false;
+        contactRepository.delete(contact);
+
     }
+
     @Override
     public List<Contact> searchContact(String query) {
         return contactRepository
@@ -75,4 +98,18 @@ public class ContactServiceImpl implements ContactService {
         return contactRepository.findAll();
     }
 
+    @Override
+    public Contact addContactToGroup(String contactId, String groupId) {
+        Contact contact = contactRepository.findById(contactId)
+                .orElseThrow(()-> new ContactNotFoundException("Contact not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(()-> new GroupNotFoundException("Group not found"));
+
+        contact.getGroups().add(group);
+        group.getContacts().add(contact);
+
+        groupRepository.save(group);
+        return contactRepository.save(contact);
+    }
 }
