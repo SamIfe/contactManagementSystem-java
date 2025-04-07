@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/contacts")
+@RequestMapping("/api/version1/contacts")
 @RequiredArgsConstructor
 public class ContactController {
     private final ContactService contactService;
@@ -39,6 +39,10 @@ public class ContactController {
         return ResponseEntity.ok(contactService.searchContacts(query));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Contact>> getAllContacts() {
+        return ResponseEntity.ok(contactService.getAllContacts());
+    }
     @PostMapping("/{contactId}/group/{groupId}")
     public ResponseEntity<Contact> addContactToGroup(
                 @PathVariable String contactId,

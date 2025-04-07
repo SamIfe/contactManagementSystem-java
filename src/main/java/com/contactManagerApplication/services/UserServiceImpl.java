@@ -2,7 +2,7 @@ package com.contactManagerApplication.services;
 
 import com.contactManagerApplication.data.models.User;
 import com.contactManagerApplication.data.repositories.UserRepository;
-import com.contactManagerApplication.exceptions.UserExceptions.UserNotFoundExecption;
+import com.contactManagerApplication.exceptions.userServiceException.UserNotFoundExecption;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -5,7 +5,7 @@ import com.contactManagerApplication.data.models.Group;
 import com.contactManagerApplication.data.repositories.GroupRepository;
 import com.contactManagerApplication.data.repositories.ContactRepository;
 
-import com.contactManagerApplication.exceptions.groupExeceptions.GroupNotFoundException;
+import com.contactManagerApplication.exceptions.groupServiceException.GroupNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
